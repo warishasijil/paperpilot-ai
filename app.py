@@ -627,7 +627,7 @@ recipient_email = st.text_input(
     placeholder="example@gmail.com"
 )
 
-if st.button("SEmail me my report", use_container_width=True):
+if st.button("Email me my report", use_container_width=True):
     if not recipient_email.strip():
         st.warning("Please enter an email address before sending the report.")
     elif "@" not in recipient_email or "." not in recipient_email:
