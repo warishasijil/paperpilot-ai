@@ -68,15 +68,15 @@ st.markdown(
         border: 1px solid #e2e8f0;
         box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         height: 100%;
-         color: #1e293b !important;
+        color: #1e293b !important;
     }
 
     .feature-card b {
-    color: #1e293b !important;
+        color: #1e293b !important;
     }
 
     .feature-card br {
-    color: #475569 !important;
+        color: #475569 !important;
     }
 
     .section-title {
@@ -348,6 +348,23 @@ with st.sidebar:
 
     st.divider()
 
+    st.header("🎙️ Voice Input")
+
+    voice_question = speech_to_text(
+        language="en",
+        use_container_width=True,
+        just_once=True,
+        key="voice_question_sidebar"
+    )
+
+    if voice_question:
+        st.session_state["current_question"] = voice_question
+        st.success(f"Voice detected: {voice_question}")
+
+    st.caption("Use this to ask a question by voice. The detected question will appear in the typed question box.")
+
+    st.divider()
+
     st.caption("Recommended demo flow:")
     st.caption("1. Upload PDF")
     st.caption("2. Generate summary")
@@ -522,19 +539,6 @@ with q7:
 with q8:
     if st.button("📝 Exam Notes", use_container_width=True):
         st.session_state["current_question"] = "Convert this content into concise study notes."
-
-st.subheader("Voice Question")
-
-voice_question = speech_to_text(
-    language="en",
-    use_container_width=True,
-    just_once=True,
-    key="voice_question"
-)
-
-if voice_question:
-    st.session_state["current_question"] = voice_question
-    st.success(f"Voice detected: {voice_question}")
 
 st.subheader("Typed Question")
 
