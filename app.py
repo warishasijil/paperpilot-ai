@@ -619,15 +619,15 @@ st.divider()
 st.header("4. Get your report by email")
 
 st.write(
-    "Send your latest question, answer, and summary to n8n. "
-    "n8n can then email the report or save it to another app."
+    "Enter your email address below to receive a structured research report containing your generated summary, questions, and AI-powered insights."
 )
+
 recipient_email = st.text_input(
     "Enter your email address to receive the report",
     placeholder="example@gmail.com"
 )
 
-if st.button("Send Report to n8n", use_container_width=True):
+if st.button("SEmail me my report", use_container_width=True):
     if not recipient_email.strip():
         st.warning("Please enter an email address before sending the report.")
     elif "@" not in recipient_email or "." not in recipient_email:
