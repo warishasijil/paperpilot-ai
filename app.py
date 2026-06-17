@@ -616,7 +616,7 @@ st.divider()
 # AUTOMATION SECTION
 # -----------------------------
 
-st.header("4. Automation: Send Report")
+st.header("4. Get your report by email")
 
 st.write(
     "Send your latest question, answer, and summary to n8n. "
