@@ -276,16 +276,20 @@ def convert_text_to_speech(text):
     return audio_bytes
 
 
-def send_to_n8n(source, question, answer, summary):
+def send_to_n8n(source, question, answer, summary, recipient_email):
     if not N8N_WEBHOOK_URL:
         return False, "N8N_WEBHOOK_URL not found. Please add it to your .env file."
 
     payload = {
+        "recipient_email": recipient_email,
         "source": source,
         "question": question,
         "answer": answer,
         "summary": summary
     }
+
+   
+
 
     try:
         response = requests.post(N8N_WEBHOOK_URL, json=payload, timeout=20)
@@ -618,24 +622,34 @@ st.write(
     "Send your latest question, answer, and summary to n8n. "
     "n8n can then email the report or save it to another app."
 )
+recipient_email = st.text_input(
+    "Enter your email address to receive the report",
+    placeholder="example@gmail.com"
+)
 
 if st.button("Send Report to n8n", use_container_width=True):
-    latest_source = st.session_state.get(
-        "last_source",
-        st.session_state.get("latest_summary_source", "No source selected")
-    )
-    latest_question = st.session_state.get("last_question", "No question asked yet.")
-    latest_answer = st.session_state.get("last_answer", "No answer generated yet.")
-    latest_summary = st.session_state.get("latest_summary", "No summary generated yet.")
-
-    success, message = send_to_n8n(
-        source=latest_source,
-        question=latest_question,
-        answer=latest_answer,
-        summary=latest_summary
-    )
-
-    if success:
-        st.success(message)
+    if not recipient_email.strip():
+        st.warning("Please enter an email address before sending the report.")
+    elif "@" not in recipient_email or "." not in recipient_email:
+        st.warning("Please enter a valid email address.")
     else:
-        st.error(message)
+        latest_source = st.session_state.get(
+            "last_source",
+            st.session_state.get("latest_summary_source", "No source selected")
+        )
+        latest_question = st.session_state.get("last_question", "No question asked yet.")
+        latest_answer = st.session_state.get("last_answer", "No answer generated yet.")
+        latest_summary = st.session_state.get("latest_summary", "No summary generated yet.")
+
+        success, message = send_to_n8n(
+            source=latest_source,
+            question=latest_question,
+            answer=latest_answer,
+            summary=latest_summary,
+            recipient_email=recipient_email.strip()
+        )
+
+        if success:
+            st.success(f"Report sent successfully to {recipient_email}.")
+        else:
+            st.error(message)
